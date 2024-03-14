@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import RayTracer
+@testable import RayTracerLib
 
 // swiftlint:disable identifier_name
 

@@ -7,9 +7,62 @@
 //
 
 import XCTest
-@testable import RayTracer
+@testable import RayTracerLib
 
 // swiftlint:disable identifier_name
+
+import Foundation
+
+class TestShape: Shape, Equatable {
+
+	var id = UUID()
+	var material: Material
+	var description: String = ""
+	var transform: Matrix
+
+	var savedRay: Ray?
+
+	public required init(material: Material, transform: Matrix = Matrix.identity) {
+		self.material = material
+		self.transform = transform
+	}
+
+	func setTransform(_ transform: Matrix) {
+		self.transform = transform
+	}
+
+	func intersections(_ ray: Ray) -> [Intersection] {
+		let intersection: Intersection? = localIntersect(ray)
+
+		if let local = intersection {
+			return [local]
+		} else {
+			return []
+		}
+	}
+
+	func localIntersect(_ ray: Ray) -> Intersection? {
+		let localRay = ray.transform(transform.inverse)
+
+		if localRay.hit() != nil {
+			savedRay = localRay
+		}
+		return savedRay?.hit()
+	}
+
+	func normal(at worldPoint: Point) -> Vector {
+		let objectPoint = transform.inverse * worldPoint
+		let objectNormal = objectPoint - Point(0, 0, 0)
+		let worldNormal = transform.inverse.transpose() * objectNormal
+		worldNormal.w = 0
+		return worldNormal.normalize()
+	}
+
+	static func == (lhs: TestShape, rhs: TestShape) -> Bool {
+		return lhs.id == rhs.id
+	}
+}
+
 
 class TestSampleShapes: XCTestCase {
 
@@ -73,18 +126,27 @@ class TestSampleShapes: XCTestCase {
 //      Then s.saved_ray.origin = point(0, 0, -2.5)
 //        And s.saved_ray.direction = vector(0, 0, 0.5)
 
-	func testScaledShapeIntersectsRay() {
-		 let r = Ray(origin: Point(0, 0, -5), direction: Vector(0, 0, 1))
+	func testScaledShapeIntersectsRay() throws {
+		let r = Ray(origin: Point(0, 0, -5), direction: Vector(0, 0, 1))
 		let shape = TestShape(material: Material())
-		shape.transform = Matrix.scaling(point: Point(2, 2, 2))
-		 let xs = shape.intersections(r)
-		 XCTAssertEqual(xs.count, 1)
+		
+		shape.setTransform(Matrix.scaling(point: Point(2, 2, 2)))
+		let xs = shape.intersections(r)
+	
+		XCTAssertEqual(xs.count, 1)
+		// FIXME: XCTAssertEqual failed: ("0") is not equal to ("1")
 
-		XCTAssertEqual(shape.savedRay?.origin, Point(0, 0, -2.5))
-		XCTAssertEqual(shape.savedRay?.direction, Vector(0, 0, 0.5))
+		let savedRay = try XCTUnwrap(shape.savedRay)
+		// FIXME:  XCTUnwrap failed: expected non-nil value of type "Ray"
 
-		 // TODO: add another test case with a non-zero intersection count
- }
+		XCTAssertEqual(savedRay.origin, Point(0, 0, -2.5))
+		// FIXME: XCTAssertEqual failed: ("nil") is not equal to ("Optional(Point: x: 0, y: 0, z: -2.5, w: 1)")
+
+		XCTAssertEqual(savedRay.direction, Vector(0, 0, 0.5))
+		// FIXME: XCTAssertEqual failed: ("nil") is not equal to ("Optional(Vector: x: 0.0, y: 0.0, z: 0.5, w: 0.0)")
+
+		// TODO: add another test case with a non-zero intersection count
+	}
 
 //    Scenario: Intersecting a translated shape with a ray
 //      Given r ← ray(point(0, 0, -5), vector(0, 0, 1))

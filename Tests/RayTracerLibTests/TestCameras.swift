@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import RayTracer
+@testable import RayTracerLib
 
 class TestCameras: XCTestCase {
 //	Scenario: Constructing a camera

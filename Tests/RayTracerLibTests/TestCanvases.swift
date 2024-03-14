@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import RayTracer
+@testable import RayTracerLib
 
 class TestCanvases: XCTestCase {
 
@@ -31,12 +31,12 @@ class TestCanvases: XCTestCase {
 		let color = VColor(1.0, 0.0, 0.0) // red
 
 		XCTAssertEqual(color.red, 1.0)
-		XCTAssertEqual(color.nsColor().redComponent, 1.0)
+		XCTAssertEqual(color.color().redComponent, 1.0)
 
-		XCTAssertEqual((NSColor.red).redComponent, color.nsColor().redComponent)
+		XCTAssertEqual((PlatformColor.red).redComponent, color.color().redComponent)
 
 		c.writePixel(2, 3, color)
-		XCTAssertEqual(c.pixel(at: 2, 3).nsColor(), NSColor.red)
+		XCTAssertEqual(c.pixel(at: 2, 3).color(), PlatformColor.red)
 	}
 
 	func testCanvasEquatability() {

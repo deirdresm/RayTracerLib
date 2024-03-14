@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import RayTracer
+@testable import RayTracerLib
 
 // swiftlint:disable file_length
 

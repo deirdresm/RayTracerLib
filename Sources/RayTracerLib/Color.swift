@@ -6,7 +6,11 @@
 //  Copyright © 2019 Deirdre Saoirse Moen. All rights reserved.
 //
 
+#if canImport(AppKit)
 import AppKit
+#else
+import UIKit
+#endif
 
 // swiftlint:disable identifier_name
 
@@ -22,8 +26,15 @@ class VColor: Vector {
         super.init(x, y, z)
     }
 
-	convenience init(nsColor: NSColor) {
-		self.init(nsColor.redComponent, nsColor.greenComponent, nsColor.blueComponent)
+	convenience init(color: PlatformColor) {
+		var red: CGFloat = 0.0
+		var green: CGFloat = 0.0
+		var blue: CGFloat = 0.0
+		var alpha: CGFloat = 0.0
+
+		color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+
+		self.init(red, green, blue)
 	}
 
 	public var red: CGFloat {
@@ -72,17 +83,11 @@ class VColor: Vector {
 		return VColor(outcolors[0], outcolors[1], outcolors[2])
 	}
 
-	func nsColor() -> NSColor {
-		return NSColor(red: x, green: y, blue: z, alpha: 1.0)
+	func color() -> PlatformColor {
+		return PlatformColor(red: x, green: y, blue: z, alpha: 1.0)
 	}
 
 	override var description: String {
 		return("Point: x: \(x), y: \(y), z: \(z), w: \(w)")
-	}
-}
-
-extension NSColor {
-	func normalized(_ value: CGFloat) -> CGFloat {
-		return value / 255.0
 	}
 }
