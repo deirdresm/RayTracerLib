@@ -10,11 +10,6 @@ import Foundation
 import AppKit
 
 typealias PlatformColor = NSColor
-extension NSColor {
-	convenience init(red: CGFloat, green: CGFloat, blue: CGFloat) {
-		self.init(redComponent: red, greenComponent: green, blueComponent: blue)
-	}
-}
 #else
 import UIKit
 

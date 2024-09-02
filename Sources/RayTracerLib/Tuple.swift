@@ -15,10 +15,6 @@ infix operator ×: MultiplicationPrecedence
 
 /// Tuple: parent class for Point and Vector.
 
-extension CGFloat {
-	public static let epsilon: CGFloat = 0.00001
-}
-
 public class Tuple: Equatable, CustomStringConvertible {
 	var x: CGFloat
 	var y: CGFloat
@@ -140,7 +136,6 @@ prefix func - <T: Tuple>(_ tuple: Tuple) -> T {
 }
 
 public func == <T: Tuple>(lhs: T, rhs: T) -> Bool {
-	let epsilon: CGFloat = 0.00001	// the other one's an instance method, and this is a class method
 
 	if abs(lhs.x - rhs.x) <= CGFloat.epsilon &&
 		abs(lhs.y - rhs.y) <= CGFloat.epsilon &&

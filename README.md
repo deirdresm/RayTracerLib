@@ -5,4 +5,4 @@ Current state:
 
 * Most files of ray traced objects ported over, but not yet converted to newer model I intend to use.
 
-* Tests have not yet been fixed to run in this environment.
+* Tests run. (Need to fix tests at the point where I stopped working on the ray tracer back when.)

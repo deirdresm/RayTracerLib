@@ -16,8 +16,8 @@ let package = Package(
             name: "RayTracerLib",
             targets: ["RayTracerLib"]),
 		.executable(
-			name: "RayTracerLibCLI",
-			targets: ["RayTracerLibCLI"])
+			name: "RayTracerCLI",
+			targets: ["RayTracerCLI"])
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -25,11 +25,11 @@ let package = Package(
         .target(
             name: "RayTracerLib"),
 		.executableTarget(
-			name: "RayTracerLibCLI",
+			name: "RayTracerCLI",
 			dependencies: ["RayTracerLib"]),
         .testTarget(
             name: "RayTracerLibTests",
-            dependencies: ["RayTracerLib"]),
+            dependencies: ["RayTracerLib", "RayTracerCLI"]),
     ]
 )
 
