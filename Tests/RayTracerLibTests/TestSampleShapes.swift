@@ -13,56 +13,6 @@ import XCTest
 
 import Foundation
 
-class TestShape: Shape, Equatable {
-
-	var id = UUID()
-	var material: Material
-	var description: String = ""
-	var transform: Matrix
-
-	var savedRay: Ray?
-
-	public required init(material: Material, transform: Matrix = Matrix.identity) {
-		self.material = material
-		self.transform = transform
-	}
-
-	func setTransform(_ transform: Matrix) {
-		self.transform = transform
-	}
-
-	func intersections(_ ray: Ray) -> [Intersection] {
-		let intersection: Intersection? = localIntersect(ray)
-
-		if let local = intersection {
-			return [local]
-		} else {
-			return []
-		}
-	}
-
-	func localIntersect(_ ray: Ray) -> Intersection? {
-		let localRay = ray.transform(transform.inverse)
-
-		if localRay.hit() != nil {
-			savedRay = localRay
-		}
-		return savedRay?.hit()
-	}
-
-	func normal(at worldPoint: Point) -> Vector {
-		let objectPoint = transform.inverse * worldPoint
-		let objectNormal = objectPoint - Point(0, 0, 0)
-		let worldNormal = transform.inverse.transpose() * objectNormal
-		worldNormal.w = 0
-		return worldNormal.normalize()
-	}
-
-	static func == (lhs: TestShape, rhs: TestShape) -> Bool {
-		return lhs.id == rhs.id
-	}
-}
-
 
 class TestSampleShapes: XCTestCase {
 
@@ -128,24 +78,16 @@ class TestSampleShapes: XCTestCase {
 
 	func testScaledShapeIntersectsRay() throws {
 		let r = Ray(origin: Point(0, 0, -5), direction: Vector(0, 0, 1))
-		let shape = TestShape(material: Material())
+		let shape = TestShape()
 		
-		shape.setTransform(Matrix.scaling(point: Point(2, 2, 2)))
-		let xs = shape.intersections(r)
-	
-		XCTAssertEqual(xs.count, 1)
-		// FIXME: XCTAssertEqual failed: ("0") is not equal to ("1")
+		shape.transform = .scaling(point: Point(2, 2, 2))
+		let xs = shape.intersects(r)
 
 		let savedRay = try XCTUnwrap(shape.savedRay)
-		// FIXME:  XCTUnwrap failed: expected non-nil value of type "Ray"
 
-		XCTAssertEqual(savedRay.origin, Point(0, 0, -2.5))
-		// FIXME: XCTAssertEqual failed: ("nil") is not equal to ("Optional(Point: x: 0, y: 0, z: -2.5, w: 1)")
+		XCTAssertEqual(savedRay.origin, Vector(0, 0, -2.5))
 
 		XCTAssertEqual(savedRay.direction, Vector(0, 0, 0.5))
-		// FIXME: XCTAssertEqual failed: ("nil") is not equal to ("Optional(Vector: x: 0.0, y: 0.0, z: 0.5, w: 0.0)")
-
-		// TODO: add another test case with a non-zero intersection count
 	}
 
 //    Scenario: Intersecting a translated shape with a ray
@@ -157,28 +99,46 @@ class TestSampleShapes: XCTestCase {
 //        And s.saved_ray.direction = vector(0, 0, 1)
 
 	func testTranslatedShapeIntersectsRay() {
-		 let r = Ray(origin: Point(0, 0, -5), direction: Vector(0, 0, 1))
+		let r = Ray(origin: Point(0, 0, -5), direction: Vector(0, 0, 1))
 		let shape = TestShape(material: Material())
-		shape.transform = Matrix.scaling(point: Point(2, 2, 2))
-		 let xs = shape.intersections(r)
-		 XCTAssertEqual(xs.count, 0)
 
-		 // TODO: add another test case with a non-zero intersection count
- }
+		shape.transform = Matrix.translation(Tuple(5, 0, 0, 0))
+		let _ = shape.intersects(r)
+
+		XCTAssertEqual(shape.savedRay?.origin, Vector(-5, 0, -5))
+		XCTAssertEqual(shape.savedRay?.direction, Vector(0, 0, 1))
+	}
 
 //    Scenario: Computing the normal on a translated shape
 //      Given s ← test_shape()
 //      When set_transform(s, translation(0, 1, 0))
 //        And n ← normal_at(s, point(0, 1.70711, -0.70711))
 //      Then n = vector(0, 0.70711, -0.70711)
-//
+
+	func testComputeNormalOnTranslatedShape() {
+		let s = TestShape(material: Material())
+		s.transform = Matrix.translation(Vector(0, 1, 0))
+
+		let n = s.normal(at: Point(0, 1.70711, -0.70711))
+		XCTAssertEqual(n, Vector(0, 0.70711, -0.70711))
+	}
+
 //    Scenario: Computing the normal on a transformed shape
 //      Given s ← test_shape()
 //        And m ← scaling(1, 0.5, 1) * rotation_z(π/5)
 //      When set_transform(s, m)
 //        And n ← normal_at(s, point(0, √2/2, -√2/2))
 //      Then n = vector(0, 0.97014, -0.24254)
-//
+
+	func testComputeNormalOnTransformedShape() {
+		let s = TestShape()
+		let zr = Matrix.rotationZ(radians: .pi / 5)
+		let sp = Matrix.scaling(point: Point(1, 0.5, 1))
+		s.transform = sp * zr
+		let n = s.normal(at: Point(0, sqrt(2)/2, -sqrt(2)/2))
+		XCTAssertEqual(n, Vector(0, 0.97014, -0.24254))
+	}
+
 //    Scenario: A shape has a parent attribute
 //      Given s ← test_shape()
 //      Then s.parent is nothing

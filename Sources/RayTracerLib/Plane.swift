@@ -13,7 +13,9 @@ class Plane: Shape {
 	var material: Material
 	var transform: Matrix
 
-	init(_ material: Material) {
+	var savedRay: Ray?
+
+	init(_ material: Material = Material()) {
 		self.material = material
 		self.transform = Matrix.identity
 	}
@@ -22,7 +24,7 @@ class Plane: Shape {
 		return "I'm on a chair in the sky."
 	}
 
-	func intersections(_ ray: Ray) -> [Intersection] {
+	func intersects(_ ray: Ray) -> [Intersection] {
 		if abs(ray.direction.y) >= CGFloat.epsilon {
 			return [Intersection(distance: -ray.origin.y / ray.direction.y, shape: self)]
 		} else {
@@ -30,7 +32,16 @@ class Plane: Shape {
 		}
 	}
 
+	func localIntersects(_ ray: Ray) ->  [Intersection] {
+		return []
+	}
+
 	func normal(at worldPoint: Point) -> Vector {
 		return Vector(0, 1, 0)
+	}
+
+	/// `==` for `Equatable` conformance.
+	static func == (lhs: Plane, rhs: Plane) -> Bool {
+		lhs.id == rhs.id
 	}
 }

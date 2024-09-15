@@ -16,7 +16,7 @@ import Foundation
 public struct Intersection: Identifiable, Equatable, Comparable {
 	public var id = UUID()
 	public let distance: CGFloat
-	public let shape: Shape
+	public let shape: any Shape
 
     // MARK: - Equatable/Comparable conformance
 
@@ -73,7 +73,7 @@ public struct IntersectionState: Equatable {
 		self.overPoint = self.point + self.normalV * CGFloat.epsilon
 	}
 
-	var shape: Shape {
+	var shape: any Shape {
 		return intersection.shape
 	}
 

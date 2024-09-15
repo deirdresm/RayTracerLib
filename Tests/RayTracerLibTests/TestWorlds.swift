@@ -50,7 +50,7 @@ class TestWorlds: XCTestCase {
 		sphereOne.material = material
 
 		let sphereTwo = Sphere()
-		sphereTwo.setTransform(Matrix.scaling(point: Point(0.5, 0.5, 0.5)))
+		sphereTwo.transform = Matrix.scaling(point: Point(0.5, 0.5, 0.5))
 		XCTAssertEqual(world.lights.first, light)
 
 		// until I decide which way I want to go with equating spheres….
@@ -81,7 +81,7 @@ class TestWorlds: XCTestCase {
 		sphereOne.material = material
 
 		let sphereTwo = Sphere()
-		sphereTwo.setTransform(Matrix.scaling(point: Point(0.5, 0.5, 0.5)))
+		sphereTwo.transform = Matrix.scaling(point: Point(0.5, 0.5, 0.5))
 
 		world.objects = [sphereOne, sphereTwo]
 

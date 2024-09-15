@@ -10,10 +10,10 @@
 import Foundation
 
 class World {
-	var objects: [Shape]
+	var objects: [any Shape]
 	var lights: [Light]
 
-	required init(objects: [Shape] = [], lights: [Light] = []) {
+	required init(objects: [any Shape] = [], lights: [Light] = []) {
 		self.objects = objects
 		self.lights = lights
 	}
@@ -22,7 +22,7 @@ class World {
 		var intersections = [Intersection]()
 
 		for object in objects {
-			let xs = object.intersections(ray)
+			let xs = object.intersects(ray)
 			intersections += xs
 		}
 
@@ -83,7 +83,7 @@ extension World {
 		sphereOne.material = material
 
 		var sphereTwo = Sphere()
-		sphereTwo.setTransform(Matrix.scaling(point: Point(0.5, 0.5, 0.5)))
+		sphereTwo.transform = Matrix.scaling(point: Point(0.5, 0.5, 0.5))
 
 		world.objects = [sphereOne, sphereTwo]
 

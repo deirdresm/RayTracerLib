@@ -10,13 +10,16 @@ import Foundation
 
 // swiftlint:disable identifier_name
 
-public protocol Shape {
+public protocol Shape: Equatable {
     var id: UUID { get }
 	var material: Material { get set }
 	var transform: Matrix { get set }
 	var description: String { get }
 
-    func intersections(_ ray: Ray) -> [Intersection]
+	var savedRay: Ray? { get }
+
+    func intersects(_ ray: Ray) -> [Intersection]
+	func localIntersects(_ ray: Ray) ->  [Intersection]
 
 	func normal(at worldPoint: Point) -> Vector
 }
