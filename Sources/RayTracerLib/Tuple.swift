@@ -15,7 +15,7 @@ infix operator ×: MultiplicationPrecedence
 
 /// Tuple: parent class for Point and Vector.
 
-public class Tuple: Equatable, CustomStringConvertible {
+public class Tuple: Equatable, CustomStringConvertible, Codable {
 	var x: CGFloat
 	var y: CGFloat
 	var z: CGFloat
@@ -26,6 +26,25 @@ public class Tuple: Equatable, CustomStringConvertible {
 		self.y = y
 		self.z = z
 		self.w = w
+	}
+
+	convenience init(_ x: CGFloat, _ y: CGFloat, _ z: CGFloat) {
+		self.init(x, y, z, 0)
+	}
+
+	/// `CodingKeys` for JSON
+	private enum CodingKeys: String, CodingKey {
+		case x, y, z, w
+	}
+
+	required public init(from decoder: any Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let w = try container.decodeIfPresent(CGFloat.self, forKey: .w)
+
+		self.x = try container.decode(CGFloat.self, forKey: .x)
+		self.y = try container.decode(CGFloat.self, forKey: .y)
+		self.z = try container.decode(CGFloat.self, forKey: .z)
+		self.w = w ?? 0
 	}
 
 	func isPoint() -> Bool {

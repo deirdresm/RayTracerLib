@@ -19,7 +19,11 @@ public final class Point: Tuple {
 	init(_ x: CGFloat, _ y: CGFloat, _ z: CGFloat) {
 		super.init(x, y, z, 1.0)
 	}
-
+	
+	required init(from decoder: any Decoder) throws {
+		try super.init(from: decoder)
+	}
+	
 	public override var description: String {
 
         return("Point: x: \(formatted(x)), y: \(formatted(y)), z: \(formatted(z)), w: \(formatted(w))")
@@ -37,4 +41,5 @@ public final class Point: Tuple {
 		 let fs = formatter.string(from: num2)
 		 return fs!
 	 }
+
 }

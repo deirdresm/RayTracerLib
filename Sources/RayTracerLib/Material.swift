@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Material: Equatable {
+public struct Material: Equatable, Codable {
 
 	// Note: no bounds checking; all should be non-negative.
 	var ambient: CGFloat = 0.1

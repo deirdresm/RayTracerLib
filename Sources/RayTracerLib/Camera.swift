@@ -9,7 +9,7 @@
 import Foundation
 
 struct Camera {
-	let	width: 	Int
+	let	width: Int
 	let height: Int
 	let fieldOfView: CGFloat
 	let transform: Matrix

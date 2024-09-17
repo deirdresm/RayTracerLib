@@ -10,7 +10,7 @@ import Foundation
 
 // swiftlint:disable identifier_name
 
-public protocol Shape: Equatable {
+public protocol Shape: Equatable, Codable {
     var id: UUID { get }
 	var material: Material { get set }
 	var transform: Matrix { get set }

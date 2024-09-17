@@ -47,6 +47,19 @@ public struct Intersection: Identifiable, Equatable, Comparable {
 	}
 }
 
+extension Intersection: Codable {
+
+	public func encode(to encoder: any Encoder) throws {
+		/// FIXME: add implementation
+		fatalError("init(from:) has not been implemented")
+	}
+
+	public init(from decoder: any Decoder) throws {
+		/// FIXME: add implementation
+		fatalError("init(from:) has not been implemented")
+	}
+}
+
 public struct IntersectionState: Equatable {
 	let intersection: Intersection
 	let ray: Ray

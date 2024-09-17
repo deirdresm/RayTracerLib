@@ -81,11 +81,11 @@ class TestSampleShapes: XCTestCase {
 		let shape = TestShape()
 		
 		shape.transform = .scaling(point: Point(2, 2, 2))
-		let xs = shape.intersects(r)
+		let _ = shape.intersects(r)
 
 		let savedRay = try XCTUnwrap(shape.savedRay)
 
-		XCTAssertEqual(savedRay.origin, Vector(0, 0, -2.5))
+		XCTAssertEqual(savedRay.origin, Point(0, 0, -2.5))
 
 		XCTAssertEqual(savedRay.direction, Vector(0, 0, 0.5))
 	}
@@ -105,7 +105,7 @@ class TestSampleShapes: XCTestCase {
 		shape.transform = Matrix.translation(Tuple(5, 0, 0, 0))
 		let _ = shape.intersects(r)
 
-		XCTAssertEqual(shape.savedRay?.origin, Vector(-5, 0, -5))
+		XCTAssertEqual(shape.savedRay?.origin, Point(-5, 0, -5))
 		XCTAssertEqual(shape.savedRay?.direction, Vector(0, 0, 1))
 	}
 

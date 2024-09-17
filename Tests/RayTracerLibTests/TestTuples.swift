@@ -251,4 +251,41 @@ class TestTupleFeatures: XCTestCase {
 		XCTAssertEqual(r, Vector(1, 0, 0))
 	}
 
+
+	/// JSON decoding test
+	func testDecodeTupleFromJSON() throws {
+		let json = """
+			{
+				"x": 1,
+				"y": 2,
+				"z": 3
+			}
+		"""
+
+		let decoder = JSONDecoder()
+		let data: Data = json.data(using: .utf8)!
+		let jsonTuple = try! decoder.decode(Tuple.self, from: data)
+
+		let testTuple = Tuple(1, 2, 3, 0)
+		XCTAssertEqual(testTuple, jsonTuple)
+	}
+
+	/// JSON decoding test with W
+	func testDecodeTupleFromJSON2() throws {
+		let json = """
+			{
+				"x": 1,
+				"y": 2,
+				"z": 3,
+				"w": 1
+			}
+		"""
+
+		let decoder = JSONDecoder()
+		let data: Data = json.data(using: .utf8)!
+		let jsonTuple = try! decoder.decode(Tuple.self, from: data)
+
+		let testTuple = Tuple(1, 2, 3, 1)
+		XCTAssertEqual(testTuple, jsonTuple)
+	}
 }

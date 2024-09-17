@@ -9,7 +9,7 @@
 import Foundation
 import CoreGraphics
 
-public struct Matrix: Equatable {
+public struct Matrix: Equatable, Codable {
     private var _matrix: [[CGFloat]]
 
     init(_ matrix: [[CGFloat]]) {

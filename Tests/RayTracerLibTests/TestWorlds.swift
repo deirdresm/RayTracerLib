@@ -20,7 +20,7 @@ class TestWorlds: XCTestCase {
 
 	func testDefaultWorldEmpty() {
 		let world = World()
-		XCTAssertEqual(world.objects.count, 0)
+		XCTAssertEqual(world.shapes.count, 0)
 		XCTAssertEqual(world.lights.count, 0)
 	}
 
@@ -40,7 +40,7 @@ class TestWorlds: XCTestCase {
 	func testDefaultWorldWithLightAndSpheres() {
 		let world = World.defaultWorld()
 
-		XCTAssertEqual(world.objects.count, 2)
+		XCTAssertEqual(world.shapes.count, 2)
 		XCTAssertEqual(world.lights.count, 1)
 
 		let light = Light(position: Point(-10, 10, -10), color: .white)
@@ -54,7 +54,7 @@ class TestWorlds: XCTestCase {
 		XCTAssertEqual(world.lights.first, light)
 
 		// until I decide which way I want to go with equating spheres….
-		let s1 = world.objects.first as? Sphere
+		let s1 = world.shapes.first as? Sphere
 		XCTAssertEqual(s1?.origin.x, sphereOne.origin.x)
 		XCTAssertEqual(s1?.origin.y, sphereOne.origin.y)
 		XCTAssertEqual(s1?.origin.z, sphereOne.origin.z)
@@ -83,7 +83,7 @@ class TestWorlds: XCTestCase {
 		let sphereTwo = Sphere()
 		sphereTwo.transform = Matrix.scaling(point: Point(0.5, 0.5, 0.5))
 
-		world.objects = [sphereOne, sphereTwo]
+		world.shapes = [sphereOne, sphereTwo]
 
 		let xs = world.intersections(ray: &ray)
 
@@ -107,7 +107,7 @@ class TestWorlds: XCTestCase {
 	func testShadingAnIntersection() {
 		let w = World.defaultWorld()
 		let ray = Ray(origin: Point(0, 0, -5), direction: Vector(0, 0, 1))
-		let shape = w.objects.first!
+		let shape = w.shapes.first!
 		let intersection = Intersection(distance: 4, shape: shape)
 		let comps = IntersectionState(intersection: intersection, ray: ray)
 		let color = w.shadeHit(with: comps)
@@ -132,7 +132,7 @@ class TestWorlds: XCTestCase {
 		world.lights = [light]
 
 		let ray = Ray(origin: Point(0, 0, 0), direction: Vector(0, 0, 1))
-		let shape = world.objects[1] // second object
+		let shape = world.shapes[1] // second object
 
 		let intersection = Intersection(distance: 0.5, shape: shape)
 
@@ -185,8 +185,8 @@ class TestWorlds: XCTestCase {
 	func testColorWhenIntersectionBehindRay() {
 		let world = World.defaultWorld()
 
-		var outer = world.objects.first!
-		var inner = world.objects.last!
+		var outer = world.shapes.first!
+		var inner = world.shapes.last!
 
 		outer.material.ambient = 1.0
 		inner.material.ambient = 1.0
@@ -273,7 +273,7 @@ class TestWorlds: XCTestCase {
 		let s2 = Sphere()
 		let m = Matrix.identity
 		s2.transform = m.translated(Point(0, 0, 10))
-		world.objects = [s1, s2]
+		world.shapes = [s1, s2]
 
 		let ray = Ray(origin: Point(0, 0, 5), direction: Vector(0, 0, 1))
 

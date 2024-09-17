@@ -10,19 +10,19 @@
 import Foundation
 
 class World {
-	var objects: [any Shape]
+	var shapes: [any Shape]
 	var lights: [Light]
 
-	required init(objects: [any Shape] = [], lights: [Light] = []) {
-		self.objects = objects
+	required init(shapes: [any Shape] = [], lights: [Light] = []) {
+		self.shapes = shapes
 		self.lights = lights
 	}
 
 	func intersections(ray: inout Ray) -> [Intersection] {
 		var intersections = [Intersection]()
 
-		for object in objects {
-			let xs = object.intersects(ray)
+		for shape in shapes {
+			let xs = shape.intersects(ray)
 			intersections += xs
 		}
 
@@ -85,7 +85,7 @@ extension World {
 		var sphereTwo = Sphere()
 		sphereTwo.transform = Matrix.scaling(point: Point(0.5, 0.5, 0.5))
 
-		world.objects = [sphereOne, sphereTwo]
+		world.shapes = [sphereOne, sphereTwo]
 
 		return world
 	}

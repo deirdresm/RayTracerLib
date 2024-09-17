@@ -28,9 +28,7 @@ class TestShape: Shape, Equatable {
 
 	func intersects(_ ray: Ray) -> [Intersection] {
 		let localRay = ray.transform(transform.inverse)
-
-		let intersection: [Intersection] = localIntersects(localRay)
-
+		savedRay = localRay
 		return []
 	}
 

@@ -36,7 +36,11 @@ class VColor: Vector {
 
 		self.init(red, green, blue)
 	}
-
+	
+	required init(from decoder: any Decoder) throws {
+		try super.init(from: decoder)
+	}
+		
 	public var red: CGFloat {
 		get {
 			return CGFloat(x)

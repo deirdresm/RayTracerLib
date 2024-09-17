@@ -11,7 +11,7 @@ import CoreGraphics
 
 // swiftlint:disable identifier_name
 
-public struct Ray: Equatable {
+public struct Ray: Equatable, Codable {
     var origin: Point
     var direction: Vector
     var intersections: [Intersection] = []

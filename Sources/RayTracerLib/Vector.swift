@@ -19,7 +19,11 @@ public class Vector: Tuple {
 	init(_ x: CGFloat, _ y: CGFloat, _ z: CGFloat) {
 		super.init(x, y, z, 0.0)
 	}
-
+	
+	required public init(from decoder: any Decoder) throws {
+		try super.init(from: decoder)
+	}
+	
 	public override var description: String {
 		return("Vector: x: \(x), y: \(y), z: \(z), w: \(w)")
 	}

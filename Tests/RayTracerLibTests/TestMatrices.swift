@@ -458,4 +458,5 @@ class TestMatrices: XCTestCase {
         let c = a * b
         XCTAssertEqual(a, c * b.inverse, accuracy: 0.00001)
     }
+
 }
